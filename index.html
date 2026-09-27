@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Happy Birthday Deepika ❤️</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  overflow:hidden;
+  background:#020611;
+  font-family:Arial,sans-serif;
+  color:white;
+}
+
+canvas{
+  position:fixed;
+  inset:0;
+}
+
+.scene{
+  position:fixed;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  text-align:center;
+  opacity:0;
+  visibility:hidden;
+  transition:1s;
+  z-index:5;
+}
+
+.scene.show{
+  opacity:1;
+  visibility:visible;
+}
+
+button{
+  margin-top:30px;
+  padding:15px 30px;
+  border:2px solid #55eaff;
+  border-radius:30px;
+  background:rgba(0,180,255,.15);
+  color:white;
+  font-size:18px;
+  box-shadow:0 0 20px #00d9ff;
+}
+
+/* INTRO */
+
+.intro h1{
+  font-size:clamp(35px,10vw,70px);
+  text-shadow:0 0 30px #00d9ff;
+}
+
+.intro p{
+  margin-top:15px;
+  color:#63eaff;
+}
+
+/* BOOK */
+
+.book{
+  width:300px;
+  height:210px;
+  position:relative;
+  perspective:1000px;
+}
+
+.page{
+  position:absolute;
+  inset:0;
+  background:#fff0c9;
+  color:#4d2140;
+  border-radius:8px;
+  padding:25px;
+  box-shadow:0 0 30px #00d9ff;
+}
+
+.cover{
+  position:absolute;
+  top:0;
+  width:50%;
+  height:100%;
+  background:#8b236b;
+  border:3px solid #ffd86b;
+  z-index:3;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  font-weight:bold;
+  transition:1.5s;
+}
+
+.left{
+  left:0;
+  transform-origin:left;
+}
+
+.right{
+  right:0;
+  transform-origin:right;
+}
+
+.book.open .left{
+  transform:rotateY(-145deg);
+}
+
+.book.open .right{
+  transform:rotateY(145deg);
+}
+
+.bookText{
+  color:#4d2140;
+  font-size:17px;
+  line-height:1.5;
+}
+
+/* CAKE */
+
+.cake{
+  width:240px;
+  margin:25px;
+}
+
+.candle{
+  width:14px;
+  height:55px;
+  background:white;
+  margin:auto;
+  position:relative;
+}
+
+.flame{
+  width:22px;
+  height:30px;
+  background:#ff9d00;
+  border-radius:50%;
+  position:absolute;
+  top:-27px;
+  left:-4px;
+  box-shadow:0 0 25px #ff9d00;
+  animation:flame .3s infinite alternate;
+}
+
+@keyframes flame{
+  to{transform:scale(1.15);}
+}
+
+.cakeBody{
+  height:110px;
+  background:linear-gradient(#ff7bb8,#e53c87);
+  border:4px solid white;
+  border-radius:15px 15px 30px 30px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:20px;
+  font-weight:bold;
+  box-shadow:0 0 30px #ff3f9d;
+}
+
+/* BALLOONS */
+
+.balloons{
+  position:relative;
+  width:100%;
+  height:280px;
+}
+
+.balloon{
+  position:absolute;
+  width:65px;
+  height:85px;
+  border-radius:50%;
+  bottom:50px;
+  animation:float 1.5s infinite alternate;
+}
+
+.balloon:after{
+  content:"";
+  position:absolute;
+  width:2px;
+  height:100px;
+  background:white;
+  left:50%;
+  top:82px;
+}
+
+.b1{left:8%;background:#ff4081;}
+.b2{left:27%;background:#00d9ff;}
+.b3{left:47%;background:#ffd43b;}
+.b4{left:67%;background:#a66cff;}
+.b5{left:87%;background:#45ff8a;}
+
+@keyframes float{
+  from{transform:translateY(10px);}
+  to{transform:translateY(-30px);}
+}
+
+.pop{
+  animation:pop .5s forwards!important;
+}
+
+@keyframes pop{
+  to{
+    transform:scale(2.5);
+    opacity:0;
+  }
+}
+
+/* FINAL */
+
+.final h1{
+  font-size:clamp(35px,10vw,75px);
+  text-shadow:
+    0 0 10px #00d9ff,
+    0 0 30px #008cff,
+    0 0 60px #0066ff;
+}
+
+.name{
+  font-size:clamp(45px,14vw,100px);
+  color:#55eaff;
+  font-weight:bold;
+  text-shadow:
+    0 0 15px #00eaff,
+    0 0 40px #008cff,
+    0 0 80px #0066ff;
+}
+
+.final p{
+  margin-top:20px;
+  font-size:20px;
+}
+
+.heart{
+  font-size:65px;
+  animation:heart 1s infinite;
+}
+
+@keyframes heart{
+  50%{transform:scale(1.25);}
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="canvas"></canvas>
+
+<!-- INTRO -->
+<div class="scene intro show" id="intro">
+
+  <div class="heart">🎁</div>
+
+  <h1>A SPECIAL SURPRISE</h1>
+
+  <p>For Someone Special ❤️</p>
+
+  <button onclick="startSurprise()">
+    TAP TO START
+  </button>
+
+</div>
+
+
+<!-- BOOK -->
+<div class="scene" id="bookScene">
+
+  <h2>📖 A Birthday Letter</h2>
+
+  <div class="book" id="book">
+
+    <div class="page">
+      <h3>💌 Dear Deepika ❤️</h3>
+
+      <p class="bookText">
+        Today is your special day! 🎂
+        <br><br>
+        May your life always be filled
+        with happiness, beautiful memories
+        and countless smiles.
+        <br><br>
+        Keep smiling and keep shining. ✨
+      </p>
+    </div>
+
+    <div class="cover left">
+      HAPPY<br>BIRTHDAY
+    </div>
+
+    <div class="cover right">
+      DEEPIKA ❤️
+    </div>
+
+  </div>
+
+  <button onclick="nextCake()">
+    OPENED ❤️
+  </button>
+
+</div>
+
+
+<!-- CAKE -->
+<div class="scene" id="cakeScene">
+
+  <h1>🎂 Your Birthday Cake 🎂</h1>
+
+  <div class="cake">
+
+    <div class="candle">
+      <div class="flame" id="flame"></div>
+    </div>
+
+    <div class="cakeBody">
+      HAPPY BIRTHDAY<br>
+      DEEPIKA ❤️
+    </div>
+
+  </div>
+
+  <p>Make a wish... ✨</p>
+
+  <button onclick="cutCake()">
+    🔪 CUT THE CAKE
+  </button>
+
+</div>
+
+
+<!-- BALLOONS -->
+<div class="scene" id="balloonScene">
+
+  <h1>🎈 BALLOON TIME 🎈</h1>
+
+  <div class="balloons">
+
+    <div class="balloon b1"></div>
+    <div class="balloon b2"></div>
+    <div class="balloon b3"></div>
+    <div class="balloon b4"></div>
+    <div class="balloon b5"></div>
+
+  </div>
+
+  <button onclick="popBalloons()">
+    💥 POP BALLOONS
+  </button>
+
+</div>
+
+
+<!-- FINAL -->
+<div class="scene final" id="finalScene">
+
+  <div class="heart">❤️</div>
+
+  <h1>🎉 HAPPY BIRTHDAY 🎉</h1>
+
+  <div class="name">
+    DEEPIKA
+  </div>
+
+  <p>
+    🎂 Wishing you endless happiness 🎂
+    <br><br>
+    ✨ Keep Smiling • Keep Shining ✨
+  </p>
+
+  <div style="font-size:45px;margin-top:25px;">
+    🎂 🎈 🎉 ❤️ 🎉 🎈 🎂
+  </div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   STAR BACKGROUND
+========================= */
+
+const canvas=document.getElementById("canvas");
+const ctx=canvas.getContext("2d");
+
+let W,H;
+let stars=[];
+
+function resize(){
+
+  W=canvas.width=innerWidth;
+  H=canvas.height=innerHeight;
+
+  stars=[];
+
+  for(let i=0;i<180;i++){
+
+    stars.push({
+      x:Math.random()*W,
+      y:Math.random()*H,
+      r:Math.random()*2,
+      a:Math.random()
+    });
+
+  }
+}
+
+resize();
+window.addEventListener("resize",resize);
+
+function background(){
+
+  ctx.fillStyle="#020611";
+  ctx.fillRect(0,0,W,H);
+
+  stars.forEach(s=>{
+
+    ctx.beginPath();
+
+    ctx.fillStyle=
+      "rgba(70,220,255,"+
+      s.a+
+      ")";
+
+    ctx.arc(
+      s.x,
+      s.y,
+      s.r,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fill();
+
+  });
+
+  requestAnimationFrame(background);
+}
+
+background();
+
+
+/* =========================
+   SCENE SYSTEM
+========================= */
+
+function show(id){
+
+  document.querySelectorAll(".scene")
+  .forEach(s=>s.classList.remove("show"));
+
+  document.getElementById(id)
+  .classList.add("show");
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+function startSurprise(){
+
+  show("bookScene");
+
+  setTimeout(()=>{
+
+    document
+      .getElementById("book")
+      .classList.add("open");
+
+  },300);
+
+}
+
+
+/* =========================
+   CAKE
+========================= */
+
+function nextCake(){
+
+  show("cakeScene");
+
+}
+
+
+function cutCake(){
+
+  document
+    .getElementById("flame")
+    .style.display="none";
+
+  setTimeout(()=>{
+
+    show("balloonScene");
+
+  },1200);
+
+}
+
+
+/* =========================
+   BALLOONS
+========================= */
+
+function popBalloons(){
+
+  const balloons=
+    document.querySelectorAll(".balloon");
+
+  balloons.forEach((b,i)=>{
+
+    setTimeout(()=>{
+
+      b.classList.add("pop");
+
+    },i*350);
+
+  });
+
+  setTimeout(()=>{
+
+    show("finalScene");
+
+  },2300);
+
+}
+
+</script>
+
+</body>
+  </html>
